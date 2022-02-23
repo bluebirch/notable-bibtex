@@ -25,7 +25,7 @@ The script `use FindBin` and `use lib` to find the modules.
 | `--test` | Don't write anything to any files. |
 | `--maxnotes=n` | Process a maximum of *n* notes in one run. Useful for testing that the result is what you expected before processing an entire BibTeX file or all notes. |
 
-### Import a BibTeX file to Notable
+### Import a BibTeX bibliography to Notable
 
 For each entry in the BibTeX file, the script tries to find the corresponding note in the Notable database and stores the entire BibTeX entry in the YAML frontmatter. Take, for example, the following BibTeX entry (actually [BibLaTeX](https://www.ctan.org/pkg/biblatex), but when importing field names doesn't matter):
 
@@ -76,4 +76,55 @@ notable-bibtex.pl import --bibliography=bibliography.bib
 | `--bibliography=file.bib` | Import `file.bib`. Can be specified multiple times to import several bibliographies. |
 | `--test` | Don't write or update any Notable notes. |
 
-## Export
+## Export a BibTeX bibliography
+
+An exported file will have the exact same entries as the file imported (albeit not inte same order, unless sorted). To export a BibTeX bibliography from Notable:
+
+```sh
+notable-bibtex.pl export --bibliography=bibliography.bib
+```
+
+| Option | Description |
+| :- | :- |
+| `--bibliography=file.bib` | Export `file.bib`. Only one file can be specified. |
+| `--sort` | Sort the exported bibliography. |
+| `--overwrite` | Overwrites file if it exists. |
+
+## Create citations with pandoc
+
+Proper citations are rendered using [pandoc](https://pandoc.org/) and [citation style language (CSL)](https://citationstyles.org/) and stored in the YAML header, for example:
+
+```yaml
+---
+reference:
+  apa: 'Upper, D. (1974). The unsuccessful self-treatment of a case of “writer’s block.” *Journal of Applied Behavior Analysis*, *7*(3), 497. <https://doi.org/10.1901/jaba.1974.7-497a>'
+  chicago-note-bibliography: 'Upper, Dennis. “The Unsuccessful Self-Treatment of a Case of ‘Writer’s Block’.” *Journal of Applied Behavior Analysis* 7, no. 3 (1974): 497. <https://doi.org/10.1901/jaba.1974.7-497a>.'
+---
+```
+
+Obviously, pandoc 2.0 or later must be installed. To process citations:
+
+```sh
+notable-bibtex.pl citeproc
+```
+
+| Option | Description |
+| :- | :- |
+| `--max=n` | Process a maximum of *n* notes in one run. |
+| `--csl=csl` | Use the specified csl style(s). Can be specified multiple times. |
+| `--overwrite` | Process citations even if they already exist in the YAML frontmatter. |
+
+## Update note tags and content
+
+*Need to write this finally.*
+
+Update note tags and add a block with the citations and inline attachments.
+
+```sh
+notable-bibtex.pl update
+```
+
+| Option | Description |
+| :- | :- |
+| `--max=n` | Process a maximum of *n* notes in one run. |
+| `--overwrite` | Replace block anyway. |
