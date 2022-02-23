@@ -15,16 +15,39 @@ use File::Temp;
 use IPC::Open3;
 use URI::Encode qw(uri_encode);
 
-# Get options
-my $Debug     = 0;
+# Usage
+my $Usage = <<END;
+
+Usage: notable-bibtex [options] <import | export | citeproc | update>
+
+Options:
+
+  --bibliography=<file> BibTeX bibliography to import/export.
+  --csl=<style>         CSL style for citeproc.
+  --debug               Lots of output. Useful for debugging only.
+  --dir=<dir>           Specify Notable directory.
+  --maxnotes=<n>        Process a maximum of n notes in one run.
+  --overwrite           Overwrite files/notes/tags even if the exist.
+  --sort                Sort BibTeX file when exporting.
+  --test                Never write anything to disk.
+  --verbose             Be verbose about what the script does.
+
+END
+
+# Configuration
+my $NotableDir = "."; # default to current directory
 my $MaxNotes  = 9999; # maximum number of notes to process in one run
+my @Bibliography;     # .bib files to import/export
+my @CSL;              # CSL styles to use with citeproc
+my $Debug     = 0;
 my $Overwrite = 0;
 my $Sort      = 0;
 my $Test      = 0;
 my $Verbose   = 0;
-my @Bibliography;
-my @CSL;
+
+# Parse command line options
 GetOptions(
+    'dir=s'          => \$NotableDir,
     'bibliography=s' => \@Bibliography,
     'csl=s'          => \@CSL,
     'debug'          => \$Debug,
@@ -35,29 +58,22 @@ GetOptions(
     'verbose'        => \$Verbose,
 ) || die "Invalid command line options";
 
-$Verbose        = 1 if ($Debug);
+# Set --verbose too if --debug is specified
+$Verbose = 1 if ($Debug);
+
+# Set debug flag of Notable module if we're doing debug
 $Notable::DEBUG = $Debug;
 
+# Set default CSL
 @CSL = qw(apa chicago-note-bibliography) unless (@CSL);
 
+# Get command
 my $Command = shift @ARGV;
 
-my $Usage = <<END;
-
-Usage: notable-bibtex [options] <import | export | citeproc | update>
-
-Valid options:
-
-  --bibliography=<file> Use bibliography.
-  --verbose             Verbose output.
-  --debug               Debugging output.
-  --test                Never write any files.
-END
-
-my $DDC = []; # global variable to hold the DDC lookup table
+my $DDC; # global variable to hold the DDC lookup table
 
 # Create Notable object
-my $Notable = Notable->new(".");
+my $Notable = Notable->new($NotableDir);
 
 if ( !$Command ) {
     say STDERR "No command specified";
@@ -621,7 +637,7 @@ sub update {
 
             # add ddc as tag
             if ( $note->has('bibtex->ddc') ) {
-                if ($DDC->{'1'}) {
+                if ($DDC) {
                     my $ddc = parse_ddc( $note->meta('bibtex->ddc'));
                     #$ddc =~ s:\.:/:g;
                     if (set_subtags( $note, "DDC", $ddc )) {
