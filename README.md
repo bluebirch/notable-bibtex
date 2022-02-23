@@ -6,7 +6,7 @@ A script to convert between a BibTeX bibliography (`.bib` file) and a [Notable](
 
 The script depends on two unpublished Perl modules, [Text::BibLaTeX](https://github.com/bluebirch/text-biblatex) and [Notable](https://github.com/bluebirch/Notable). I have included them as submodules, so installing should be as simple as:
 
-```sh
+```
 git clone https://github.com/bluebirch/notable-bibtex.git
 cd notable-bibtex
 git submodule init
@@ -67,7 +67,7 @@ The script first tries to find a corresponding note with the same BibTeX key. Se
 
 To import a BibTeX file to Notable:
 
-```sh
+```
 notable-bibtex.pl import --bibliography=bibliography.bib
 ```
 
@@ -80,7 +80,7 @@ notable-bibtex.pl import --bibliography=bibliography.bib
 
 An exported file will have the exact same entries as the file imported (albeit not inte same order, unless sorted). To export a BibTeX bibliography from Notable:
 
-```sh
+```
 notable-bibtex.pl export --bibliography=bibliography.bib
 ```
 
@@ -104,7 +104,7 @@ reference:
 
 Obviously, pandoc 2.0 or later must be installed. To process citations:
 
-```sh
+```
 notable-bibtex.pl citeproc
 ```
 
@@ -120,7 +120,7 @@ notable-bibtex.pl citeproc
 
 Update note tags and add a block with the citations and inline attachments.
 
-```sh
+```
 notable-bibtex.pl update
 ```
 
