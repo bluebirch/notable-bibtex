@@ -116,7 +116,7 @@ notable-bibtex.pl citeproc
 
 ## Update note tags and content
 
-*Need to write this finally.*
+*Need to write this.*
 
 Update note tags and add a block with the citations and inline attachments.
 
