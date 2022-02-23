@@ -1,0 +1,6 @@
+[submodule "lib/Text-BibLaTeX"]
+	path = Text-BibLaTeX
+	url = https://github.com/bluebirch/text-biblatex
+[submodule "Notable"]
+	path = Notable
+	url = https://github.com/bluebirch/Notable
