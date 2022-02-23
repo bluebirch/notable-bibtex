@@ -13,14 +13,13 @@ git submodule init
 git submodule update
 ```
 
-The script `use FindBin` and `use lib` to find the installed modules.
+The script `use FindBin` and `use lib` to find the modules.
 
 ## Usage
 
-Global options:
-
-`--dir=<dir>`
-: Use `<dir>` as Notable data directory. Defaults to `.`, the current directory.
+| Option | Description |
+| :- | :- |
+| `--dir=dir` | Use `dir` as Notable data directory. Defaults to `.`, the current directory. |
 
 ### Import
 
